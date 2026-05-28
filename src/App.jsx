@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from "./components/LoginForm.jsx";
 import Notification from "./components/Notification.jsx";
+import HeaderUserLogged from "./components/HeaderUserLogged.jsx";
 
 const App = () => {
 
@@ -21,6 +22,16 @@ const App = () => {
     }
   }, [user])
 
+  useEffect(()=>{
+
+    const loggedUserJson = window.localStorage.getItem('loggedBloglistUser')
+    if(loggedUserJson){
+      const user = JSON.parse(loggedUserJson)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async (credentials)=>{
     try{
       const user = await loginService.login(credentials)
@@ -37,18 +48,27 @@ const App = () => {
     }
   }
 
+  const handleLogout = ()=>{
+    window.localStorage.removeItem('loggedBloglistUser')
+    setBlogs([])
+    setUser(null)
+    blogService.setToken(null)
+
+  }
+
   return (
       <div>
         <Notification message={errorMessage}/>
         {
           user === null
             ? <LoginForm handleLogin={handleLogin}/>
-              : <p>{user.name} logged in</p>
+              : <HeaderUserLogged username={user.username} handleLogout={handleLogout}/>
         }
-
-        {blogs.map(blog =>
+        {
+          blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
-        )}
+          )
+        }
       </div>
   )
 }
