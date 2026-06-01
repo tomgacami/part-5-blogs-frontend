@@ -10,7 +10,7 @@ import NoteForm from "./components/NoteForm.jsx";
 const App = () => {
 
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
   const[user, setUser]=useState(null)
 
   useEffect(() => {
@@ -42,9 +42,9 @@ const App = () => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
 
     } catch (exception){
-      setErrorMessage('Error logging in')
+      setMessage({text: 'Wrong username or password', type: 'error'})
       setTimeout(()=>{
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -63,10 +63,14 @@ const App = () => {
       const returnedBlog = await blogService.create(blogToCreate)
 
       setBlogs(blogs.concat(returnedBlog))
-    } catch(exception){
-      setErrorMessage(exception.message)
+      setMessage({text:`A new blog ${returnedBlog.title} by ${returnedBlog.author} added.`, type: 'success'})
       setTimeout(()=>{
-        setErrorMessage(null)
+        setMessage(null)
+      }, 5000)
+    } catch(exception){
+      setMessage({text: exception.message, type: 'error'})
+      setTimeout(()=>{
+        setMessage(null)
       }, 5000)
     }
 
@@ -76,8 +80,8 @@ const App = () => {
 
     return (
         <div>
-          <Notification message={errorMessage}/>
-          <LoginForm handleLogin={handleLogin}/>
+          {/*<Notification message={message}/>*/}
+          <LoginForm handleLogin={handleLogin} message={message}/>
         </div>
 
     )
@@ -85,8 +89,8 @@ const App = () => {
 
   return (
       <div>
-        <Notification message={errorMessage}/>
-        <HeaderUserLogged username={user.username} handleLogout={handleLogout}/>
+        {/*<Notification message={message}/>*/}
+        <HeaderUserLogged username={user.username} handleLogout={handleLogout} message={message}/>
         <NoteForm handleNewBlog={handleNewBlog}/>
         {
           blogs.map(blog =>
