@@ -5,6 +5,7 @@ import loginService from './services/login'
 import LoginForm from "./components/LoginForm.jsx";
 import Notification from "./components/Notification.jsx";
 import HeaderUserLogged from "./components/HeaderUserLogged.jsx";
+import NoteForm from "./components/NoteForm.jsx";
 
 const App = () => {
 
@@ -56,14 +57,37 @@ const App = () => {
 
   }
 
+  const handleNewBlog = async (blogToCreate)=>{
+
+    try{
+      const returnedBlog = await blogService.create(blogToCreate)
+
+      setBlogs(blogs.concat(returnedBlog))
+    } catch(exception){
+      setErrorMessage(exception.message)
+      setTimeout(()=>{
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+  }
+
+  if (!user){
+
+    return (
+        <div>
+          <Notification message={errorMessage}/>
+          <LoginForm handleLogin={handleLogin}/>
+        </div>
+
+    )
+  }
+
   return (
       <div>
         <Notification message={errorMessage}/>
-        {
-          user === null
-            ? <LoginForm handleLogin={handleLogin}/>
-              : <HeaderUserLogged username={user.username} handleLogout={handleLogout}/>
-        }
+        <HeaderUserLogged username={user.username} handleLogout={handleLogout}/>
+        <NoteForm handleNewBlog={handleNewBlog}/>
         {
           blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
