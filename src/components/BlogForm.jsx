@@ -1,7 +1,7 @@
 import {useState} from "react";
 
 
-const NoteForm = ({handleNewBlog})=>{
+const BlogForm = ({handleNewBlog})=>{
 
     const [title, setTitle]= useState('')
     const [author, setAuthor]= useState('')
@@ -59,4 +59,4 @@ const NoteForm = ({handleNewBlog})=>{
     )
 }
 
-export default NoteForm
+export default BlogForm

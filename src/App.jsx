@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from "./components/LoginForm.jsx";
-import Notification from "./components/Notification.jsx";
 import HeaderUserLogged from "./components/HeaderUserLogged.jsx";
-import NoteForm from "./components/NoteForm.jsx";
+import BlogForm from "./components/BlogForm.jsx";
+import Togglable from "./components/Togglable.jsx";
 
 const App = () => {
 
@@ -61,6 +61,7 @@ const App = () => {
 
     try{
       const returnedBlog = await blogService.create(blogToCreate)
+      blogsFormRef.current.toggleVisibility()
 
       setBlogs(blogs.concat(returnedBlog))
       setMessage({text:`A new blog ${returnedBlog.title} by ${returnedBlog.author} added.`, type: 'success'})
@@ -76,26 +77,29 @@ const App = () => {
 
   }
 
-  if (!user){
-
-    return (
-        <div>
-          {/*<Notification message={message}/>*/}
-          <LoginForm handleLogin={handleLogin} message={message}/>
-        </div>
-
-    )
-  }
+  const blogsFormRef = useRef()
+  const uiUserLogged = ()=>(
+      <div>
+        <HeaderUserLogged username={user.username} handleLogout={handleLogout} message={message}/>
+        <Togglable buttonLabel="Create new blog" ref={blogsFormRef}>
+          <BlogForm handleNewBlog={handleNewBlog}/>
+        </Togglable>
+      {
+        blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+        )
+      }
+      </div>
+  )
 
   return (
       <div>
-        {/*<Notification message={message}/>*/}
-        <HeaderUserLogged username={user.username} handleLogout={handleLogout} message={message}/>
-        <NoteForm handleNewBlog={handleNewBlog}/>
-        {
-          blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )
+        {!user &&
+            <LoginForm handleLogin={handleLogin} message={message}/>
+        }
+
+        {user &&
+            uiUserLogged()
         }
       </div>
   )
