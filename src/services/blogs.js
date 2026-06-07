@@ -30,4 +30,16 @@ const create = async newBlog  => {
     return response.data
 }
 
-export default { getAll, setToken, create }
+const updateLike = async (blog, id) => {
+
+    const config = {
+        headers: { Authorization: token },
+    }
+
+    const response = await axios
+        //IF NEEDED UPDATE A COMPLETE BLOG SEND BLOG OBJECT INSTEAD 'NULL'
+        .put(`${baseUrl}/${id}`, null, config)
+    return response.data
+}
+
+export default { getAll, setToken, create, updateLike }
