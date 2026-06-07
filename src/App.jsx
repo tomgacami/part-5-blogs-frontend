@@ -63,8 +63,9 @@ const App = () => {
 
     try{
       const updatedBlog = await blogService.updateLike(blog, id)
-      setBlogs(blogs.map(b => b.id !== id ? b : updatedBlog))
-
+      //RESOLVING PROBLEM: FIX USER NAME DISAPPEAR JUST IN FRONTEND, DEFINITIVE SOLUTION ADDING POPULATE ON 'PUT' METHOD IN BACKEND
+      // setBlogs(blogs.map(b => b.id !== id ? b : updatedBlog))
+      setBlogs(blogs.map(b => b.id !== id ? b : {...b, likes: updatedBlog.likes}))
 
     } catch(exception){
 
