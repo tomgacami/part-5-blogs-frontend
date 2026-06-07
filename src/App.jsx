@@ -18,7 +18,7 @@ const App = () => {
     if(user) {
       blogService.getAll()
           .then(blogs =>
-      setBlogs( blogs)
+              setBlogs( blogs)
           )
     }
   }, [user])
@@ -76,6 +76,8 @@ const App = () => {
     }
   }
 
+  const sortBlogs = [...blogs].sort(( a, b ) => b.likes - a.likes)
+
   const handleNewBlog = async (blogToCreate)=>{
 
     try{
@@ -103,7 +105,7 @@ const App = () => {
         <Togglable buttonLabel="Create new blog" ref={blogsFormRef}>
           <BlogForm handleNewBlog={handleNewBlog}/>
         </Togglable>
-        <BlogList blogs={blogs} likeBlog={likeBlog}/>
+        <BlogList blogs={sortBlogs} likeBlog={likeBlog}/>
       </div>
   )
 
