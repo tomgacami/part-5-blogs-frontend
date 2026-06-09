@@ -29,6 +29,10 @@ const create = async newBlog  => {
     return response.data
 }
 
+
+// Current endpoint only increments likes.
+// If PUT is later changed to update the whole blog,
+// send the updated blog object instead of null.
 const updateLike = async (blog, id) => {
 
     const config = {
@@ -37,8 +41,18 @@ const updateLike = async (blog, id) => {
 
     const response = await axios
         //IF NEEDED UPDATE A COMPLETE BLOG SEND BLOG OBJECT INSTEAD 'NULL'
+
         .put(`${baseUrl}/${id}`, null, config)
     return response.data
 }
 
-export default { getAll, setToken, create, updateLike }
+const deleteBlog = async (id) => {
+    const config = {
+        headers: { Authorization: token },
+    }
+    const response = await axios
+        .delete(`${baseUrl}/${id}`, config)
+    return response.data
+}
+
+export default { getAll, setToken, create, updateLike, deleteBlog }

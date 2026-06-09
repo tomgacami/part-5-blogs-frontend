@@ -76,6 +76,15 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (blog)=>{
+
+    const confirmDeleteBlog = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+    if (confirmDeleteBlog) {
+      await blogService.deleteBlog(blog.id)
+      setBlogs(blogs.filter( b => b.id !== blog.id))
+    }
+  }
+
   const sortBlogs = [...blogs].sort(( a, b ) => b.likes - a.likes)
 
   const handleNewBlog = async (blogToCreate)=>{
@@ -105,7 +114,7 @@ const App = () => {
         <Togglable buttonLabel="Create new blog" ref={blogsFormRef}>
           <BlogForm handleNewBlog={handleNewBlog}/>
         </Togglable>
-        <BlogList blogs={sortBlogs} likeBlog={likeBlog}/>
+        <BlogList blogs={sortBlogs} likeBlog={likeBlog} deleteBlog={deleteBlog} username={user.username}/>
       </div>
   )
 
