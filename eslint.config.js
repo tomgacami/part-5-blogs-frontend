@@ -8,7 +8,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 export default defineConfig([
   { ignores: ['dist'] },
   {
-    files: ['**/*.{js,mjs,cjs}'],
+    files: ['**/*.{js,mjs,cjs,jsx,test.jsx}'],
     plugins: { js, stylistic,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh
@@ -16,7 +16,7 @@ export default defineConfig([
     extends: ['js/recommended'],
     languageOptions: {
       globals: globals.browser,
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
@@ -52,7 +52,7 @@ export default defineConfig([
       'no-unreachable': 'error',
       'no-redeclare': 'error',
       'no-constant-condition': 'warn',
-      curly: 'warn',
+      'curly': 'warn',
       'no-shadow': 'warn',
       'no-duplicate-imports': 'warn',
       'prefer-template': 'warn',
