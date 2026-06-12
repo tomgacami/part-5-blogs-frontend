@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react'
 import Blog from '../components/Blog.jsx'
 import { test, expect } from 'vitest'
+import userEvent from '@testing-library/user-event'
 
 
 const blog = {
@@ -36,6 +37,26 @@ describe('<Blog />', () => {
     expect(additionalInfo).toHaveStyle('display:none')
     expect(url).not.toBeVisible()
     expect(likes).not.toBeVisible()
+
+  })
+
+  test('Exercise 5.14 step 2', async () => {
+
+    const { container } = render(<Blog blog={blog} />)
+
+    const user = userEvent.setup()
+    const buttonVisibility = screen.getByText('view')
+
+    await  user.click(buttonVisibility)
+
+    const additionalInfo = container.querySelector('.additional-info-blog')
+    const url = screen.queryByText('www.testUrl.com')
+    const likes = screen.queryByText(`Likes ${blog.likes}`)
+
+    expect(additionalInfo).not.toBeNull()
+    expect(additionalInfo).not.toHaveStyle('display:none')
+    expect(url).toBeVisible()
+    expect(likes).toBeVisible()
 
   })
 
