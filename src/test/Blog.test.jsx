@@ -47,7 +47,7 @@ describe('<Blog />', () => {
     const user = userEvent.setup()
     const buttonVisibility = screen.getByText('view')
 
-    await  user.click(buttonVisibility)
+    await user.click(buttonVisibility)
 
     const additionalInfo = container.querySelector('.additional-info-blog')
     const url = screen.queryByText('www.testUrl.com')
@@ -57,6 +57,26 @@ describe('<Blog />', () => {
     expect(additionalInfo).not.toHaveStyle('display:none')
     expect(url).toBeVisible()
     expect(likes).toBeVisible()
+
+  })
+
+  test('Exercise 5.15 step 3', async () => {
+
+    screen.debug()
+    const user = userEvent.setup()
+    const likeBlog = vi.fn()
+
+    const { container } = render(<Blog blog={blog} likeBlog={likeBlog}/>)
+
+    const buttonVisibility = screen.getByText('view')
+    await user.click(buttonVisibility)
+
+    const buttonLike = screen.getByText('like')
+
+    await user.click(buttonLike)
+    await user.click(buttonLike)
+
+    expect(likeBlog.mock.calls).toHaveLength(2)
 
   })
 
