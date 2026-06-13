@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import Blog from '../components/Blog.jsx'
 import { test, expect } from 'vitest'
 import userEvent from '@testing-library/user-event'
+import BlogForm from '../components/BlogForm.jsx'
 
 
 const blog = {
@@ -62,7 +63,6 @@ describe('<Blog />', () => {
 
   test('Exercise 5.15 step 3', async () => {
 
-    screen.debug()
     const user = userEvent.setup()
     const likeBlog = vi.fn()
 
@@ -77,6 +77,31 @@ describe('<Blog />', () => {
     await user.click(buttonLike)
 
     expect(likeBlog.mock.calls).toHaveLength(2)
+
+  })
+
+  test('Exercise 5.16 step 4', async () => {
+
+    const handleNewBlog = vi.fn()
+    const user = userEvent.setup()
+
+    const { container } = render(<BlogForm handleNewBlog={handleNewBlog}/>)
+
+    const titleInput = container.querySelector('#title-blog-input')
+    const authorInput = container.querySelector('#author-blog-input')
+    const urlInput = container.querySelector('#url-blog-input')
+
+    const createButton = screen.getByText('Create')
+
+    await user.type(titleInput, 'New blog title')
+    await user.type(authorInput, 'New blog author')
+    await user.type(urlInput, 'New blog url')
+
+    await user.click(createButton)
+
+    expect(handleNewBlog.mock.calls[0][0].title).toBe('New blog title')
+    expect(handleNewBlog.mock.calls[0][0].author).toBe('New blog author')
+    expect(handleNewBlog.mock.calls[0][0].url).toBe('New blog url')
 
   })
 
