@@ -28,7 +28,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
   const allowDeleteBlog = blog.user.username === username
 
   return (
-    <div style={blogStyle} data-testid='bloglist' >
+    <div data-testid='blog' style={blogStyle}  >
       <div className='blog-header'>
         <span>{blog.title} {blog.author}</span> <button onClick={toggleVisibility}>{textButton}</button>
       </div>
